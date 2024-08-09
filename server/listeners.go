@@ -46,7 +46,7 @@ func (dsl *diskSpaceLimiter) Reset() {
 // should be reset, so it can properly be triggered as needed.
 func (dsl *diskSpaceLimiter) Trigger() {
 	dsl.o.Do(func() {
-		dsl.server.PublishConsoleOutputFromDaemon("Server is exceeding the assigned disk space limit, stopping process now.")
+		dsl.server.PublishConsoleOutputFromDaemon("서버가 할당된 디스크 용량 제한을 초과했습니다. 프로세스를 종료합니다.")
 		if err := dsl.server.Environment.WaitForStop(dsl.server.Context(), time.Minute, true); err != nil {
 			dsl.server.Log().WithField("error", err).Error("failed to stop server after exceeding space limit!")
 		}
@@ -129,9 +129,9 @@ func (s *Server) StartEventListeners() {
 					case environment.DockerImagePullStatus:
 						s.Events().Publish(InstallOutputEvent, e.Data)
 					case environment.DockerImagePullStarted:
-						s.PublishConsoleOutputFromDaemon("Pulling Docker container image, this could take a few minutes to complete...")
+						s.PublishConsoleOutputFromDaemon("Docker 이미지를 가져오고 있습니다. 이 작업은 조금 걸릴 수 있습니다...")
 					case environment.DockerImagePullCompleted:
-						s.PublishConsoleOutputFromDaemon("Finished pulling Docker container image")
+						s.PublishConsoleOutputFromDaemon("Docker 이미지를 가져왔습니다.")
 					default:
 					}
 				}(v, limit)

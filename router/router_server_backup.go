@@ -81,7 +81,7 @@ func postServerRestoreBackup(c *gin.Context) {
 		return
 	}
 	if data.Adapter == backup.S3BackupAdapter && data.DownloadUrl == "" {
-		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "The download_url field is required when the backup adapter is set to S3."})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "백업 어댑터가 S3로 설정되어 있을 경우 download_url 필드가 필수입니다."})
 		return
 	}
 
@@ -117,7 +117,7 @@ func postServerRestoreBackup(c *gin.Context) {
 			if err := s.RestoreBackup(b, nil); err != nil {
 				logger.WithField("error", err).Error("failed to restore local backup to server")
 			}
-			s.Events().Publish(server.DaemonMessageEvent, "Completed server restoration from local backup.")
+			s.Events().Publish(server.DaemonMessageEvent, "서버를 백업에서 성공적으로 복원했습니다.")
 			s.Events().Publish(server.BackupRestoreCompletedEvent, "")
 			logger.Info("completed server restoration from local backup")
 			s.SetRestoring(false)
@@ -151,7 +151,7 @@ func postServerRestoreBackup(c *gin.Context) {
 	if res.Header.Get("Content-Type") == "" || !strings.Contains("application/x-gzip application/gzip", res.Header.Get("Content-Type")) {
 		_ = res.Body.Close()
 		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"error": "The provided backup link is not a supported content type. \"" + res.Header.Get("Content-Type") + "\" is not application/x-gzip.",
+			"error": "입력한 백업 링크가 지원되는 파일 타입이 아닙니다. \"" + res.Header.Get("Content-Type") + "\" 은(는) application/x-gzip 포맷이 아닙니다.",
 		})
 		return
 	}
@@ -161,7 +161,7 @@ func postServerRestoreBackup(c *gin.Context) {
 		if err := s.RestoreBackup(backup.NewS3(client, uuid, ""), res.Body); err != nil {
 			logger.WithField("error", errors.WithStack(err)).Error("failed to restore remote S3 backup to server")
 		}
-		s.Events().Publish(server.DaemonMessageEvent, "Completed server restoration from S3 backup.")
+		s.Events().Publish(server.DaemonMessageEvent, "서버를 S3 백업에서 성공적으로 복원했습니다.")
 		s.Events().Publish(server.BackupRestoreCompletedEvent, "")
 		logger.Info("completed server restoration from S3 backup")
 		s.SetRestoring(false)
@@ -181,7 +181,7 @@ func deleteServerBackup(c *gin.Context) {
 		// Just return from the function at this point if the backup was not located.
 		if errors.Is(err, os.ErrNotExist) {
 			c.AbortWithStatusJSON(http.StatusNotFound, gin.H{
-				"error": "The requested backup was not found on this server.",
+				"error": "요청한 백업이 이 서버에 존재하지 않습니다.",
 			})
 			return
 		}

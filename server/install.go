@@ -473,7 +473,7 @@ func (ip *InstallationProcess) Execute() (string, error) {
 	// If there is an error during the streaming output just report it and do nothing else, the
 	// install can still run, the console just won't have any output.
 	go func(id string) {
-		ip.Server.Events().Publish(DaemonMessageEvent, "Starting installation process, this could take a few minutes...")
+		ip.Server.Events().Publish(DaemonMessageEvent, "설치 작업을 시작합니다. 이 작업은 조금 걸릴 수 있습니다...")
 		if err := ip.StreamOutput(ctx, id); err != nil {
 			ip.Server.Log().WithField("error", err).Warn("error connecting to server install stream output")
 		}
@@ -484,7 +484,7 @@ func (ip *InstallationProcess) Execute() (string, error) {
 	case err := <-eChan:
 		// Once the container has stopped running we can mark the install process as being completed.
 		if err == nil {
-			ip.Server.Events().Publish(DaemonMessageEvent, "Installation process completed.")
+			ip.Server.Events().Publish(DaemonMessageEvent, "설치 작업이 완료되었습니다.")
 		} else {
 			return "", err
 		}

@@ -25,7 +25,7 @@ func (s *Server) PublishConsoleOutputFromDaemon(data string) {
 	})
 	s.Events().Publish(
 		ConsoleOutputEvent,
-		colorstring.Color(fmt.Sprintf("[yellow][bold][%s Daemon]:[default] %s", appName, data)),
+		colorstring.Color(fmt.Sprintf("[yellow][%s Daemon]:[default] %s", appName, data)),
 	)
 }
 
@@ -37,7 +37,7 @@ func (s *Server) Throttler() *ConsoleThrottle {
 
 		s.throttler = newConsoleThrottle(throttles.Lines, period)
 		s.throttler.strike = func() {
-			s.PublishConsoleOutputFromDaemon("Server is outputting console data too quickly -- throttling...")
+			s.PublishConsoleOutputFromDaemon("서버가 콘솔에 정보를 너무 빠르게 출력하고 있습니다 -- 속도를 늦추는 중...")
 		}
 	})
 	return s.throttler
