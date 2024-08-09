@@ -11,9 +11,8 @@ on:
 jobs:
   build-and-push:
     name: Build and Push
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     # Always run against a tag, even if the commit into the tag has [docker skip] within the commit message.
-    if: "!contains(github.ref, 'develop') || (!contains(github.event.head_commit.message, 'skip docker') && !contains(github.event.head_commit.message, 'docker skip'))"
     steps:
       - name: Code checkout
         uses: actions/checkout@v4
@@ -41,7 +40,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.REGISTRY_TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Get Build Information
         id: build_info
