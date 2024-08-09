@@ -189,7 +189,7 @@ func (s *Server) onBeforeStart() error {
 	if s.DiskSpace() <= 0 {
 		s.Filesystem().HasSpaceAvailable(true)
 	} else {
-		s.PublishConsoleOutputFromDaemon("서버 디스크 사용량을 확인하는 중입니다. 이 작업은 조금 걸릴 수 있습니다...")
+		s.PublishConsoleOutputFromDaemon("디스크 용량을 확인하는 중입니다. 이 작업은 조금 걸릴 수 있습니다...")
 		if err := s.Filesystem().HasSpaceErr(false); err != nil {
 			return err
 		}
