@@ -189,7 +189,7 @@ func (s *Server) onBeforeStart() error {
 	if s.DiskSpace() <= 0 {
 		s.Filesystem().HasSpaceAvailable(true)
 	} else {
-		s.PublishConsoleOutputFromDaemon("Checking server disk space usage, this could take a few seconds...")
+		s.PublishConsoleOutputFromDaemon("디스크 용량을 확인하는 중입니다. 이 작업은 조금 걸릴 수 있습니다...")
 		if err := s.Filesystem().HasSpaceErr(false); err != nil {
 			return err
 		}
@@ -200,13 +200,13 @@ func (s *Server) onBeforeStart() error {
 	// is complete. Any errors as a result of this will just be bubbled out in the logger,
 	// we don't need to actively do anything about it at this point, worse comes to worst the
 	// server starts in a weird state and the user can manually adjust.
-	s.PublishConsoleOutputFromDaemon("Updating process configuration files...")
+	s.PublishConsoleOutputFromDaemon("프로세스 구성 파일을 업데이트하는 중...")
 	s.Log().Debug("updating server configuration files...")
 	s.UpdateConfigurationFiles()
 	s.Log().Debug("updated server configuration files")
 
 	if config.Get().System.CheckPermissionsOnBoot {
-		s.PublishConsoleOutputFromDaemon("Ensuring file permissions are set correctly, this could take a few seconds...")
+		s.PublishConsoleOutputFromDaemon("파일 권한을 확인하는 중입니다. 이 작업은 조금 걸릴 수 있습니다...")
 		// Ensure all the server file permissions are set correctly before booting the process.
 		s.Log().Debug("chowning server root directory...")
 		if err := s.Filesystem().Chown("/"); err != nil {

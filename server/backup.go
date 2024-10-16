@@ -153,7 +153,7 @@ func (s *Server) RestoreBackup(b backup.BackupInterface, reader io.ReadCloser) (
 	s.Log().Debug("starting file writing process for backup restoration")
 	err = b.Restore(s.Context(), reader, func(file string, info fs.FileInfo, r io.ReadCloser) error {
 		defer r.Close()
-		s.Events().Publish(DaemonMessageEvent, "(restoring): "+file)
+		s.Events().Publish(DaemonMessageEvent, "(복원중): "+file)
 		// TODO: since this will be called a lot, it may be worth adding an optimized
 		// Write with Chtimes method to the UnixFS that is able to re-use the
 		// same dirfd and file name.

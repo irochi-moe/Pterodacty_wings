@@ -51,7 +51,7 @@ func (s *Server) handleServerCrash() error {
 	if s.Environment.State() != environment.ProcessOfflineState || !s.Config().CrashDetectionEnabled {
 		if !s.Config().CrashDetectionEnabled {
 			s.Log().Debug("server triggered crash detection but handler is disabled for server process")
-			s.PublishConsoleOutputFromDaemon("Aborting automatic restart, crash detection is disabled for this instance.")
+			s.PublishConsoleOutputFromDaemon("자동 재시작을 취소합니다. 충돌 감지가 비활성화되어 있습니다.")
 		}
 
 		return nil
@@ -69,9 +69,9 @@ func (s *Server) handleServerCrash() error {
 		return nil
 	}
 
-	s.PublishConsoleOutputFromDaemon("---------- Detected server process in a crashed state! ----------")
-	s.PublishConsoleOutputFromDaemon(fmt.Sprintf("Exit code: %d", exitCode))
-	s.PublishConsoleOutputFromDaemon(fmt.Sprintf("Out of memory: %t", oomKilled))
+	s.PublishConsoleOutputFromDaemon("---------- 서버 충돌이 감지되었습니다! ----------")
+	s.PublishConsoleOutputFromDaemon(fmt.Sprintf("종료 코드: %d", exitCode))
+	s.PublishConsoleOutputFromDaemon(fmt.Sprintf("메모리 부족(Out of memory): %t", oomKilled))
 
 	c := s.crasher.LastCrashTime()
 	timeout := config.Get().System.CrashDetection.Timeout
@@ -81,7 +81,7 @@ func (s *Server) handleServerCrash() error {
 	//
 	// If timeout is set to 0, always reboot the server (this is probably a terrible idea, but some people want it)
 	if timeout != 0 && !c.IsZero() && c.Add(time.Second*time.Duration(config.Get().System.CrashDetection.Timeout)).After(time.Now()) {
-		s.PublishConsoleOutputFromDaemon("Aborting automatic restart, last crash occurred less than " + strconv.Itoa(timeout) + " seconds ago.")
+		s.PublishConsoleOutputFromDaemon("자동 재시작을 취소합니다. 마지막 충돌이 " + strconv.Itoa(timeout) + " 초 전이었습니다.")
 		return &crashTooFrequent{}
 	}
 

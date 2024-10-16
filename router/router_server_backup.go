@@ -117,7 +117,7 @@ func postServerRestoreBackup(c *gin.Context) {
 			if err := s.RestoreBackup(b, nil); err != nil {
 				logger.WithField("error", err).Error("failed to restore local backup to server")
 			}
-			s.Events().Publish(server.DaemonMessageEvent, "Completed server restoration from local backup.")
+			s.Events().Publish(server.DaemonMessageEvent, "서버를 백업에서 성공적으로 복원했습니다.")
 			s.Events().Publish(server.BackupRestoreCompletedEvent, "")
 			logger.Info("completed server restoration from local backup")
 			s.SetRestoring(false)
@@ -161,7 +161,7 @@ func postServerRestoreBackup(c *gin.Context) {
 		if err := s.RestoreBackup(backup.NewS3(client, uuid, ""), res.Body); err != nil {
 			logger.WithField("error", errors.WithStack(err)).Error("failed to restore remote S3 backup to server")
 		}
-		s.Events().Publish(server.DaemonMessageEvent, "Completed server restoration from S3 backup.")
+		s.Events().Publish(server.DaemonMessageEvent, "서버를 S3 백업에서 성공적으로 복원했습니다.")
 		s.Events().Publish(server.BackupRestoreCompletedEvent, "")
 		logger.Info("completed server restoration from S3 backup")
 		s.SetRestoring(false)
