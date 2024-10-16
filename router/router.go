@@ -70,7 +70,6 @@ func Configure(m *wserver.Manager, client remote.Client) *gin.Engine {
 	{
 		server.GET("", getServer)
 		server.DELETE("", deleteServer)
-		server.GET("/version", getInstalledVersion)
 
 		server.GET("/logs", getServerLogs)
 		server.POST("/power", postServerPower)
@@ -79,6 +78,8 @@ func Configure(m *wserver.Manager, client remote.Client) *gin.Engine {
 		server.POST("/reinstall", postServerReinstall)
 		server.POST("/sync", postServerSync)
 		server.POST("/ws/deny", postServerDenyWSTokens)
+
+		server.GET("/version", getInstalledVersion)
 
 		// This archive request causes the archive to start being created
 		// this should only be triggered by the panel.
